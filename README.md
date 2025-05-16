@@ -1,29 +1,47 @@
 # RFM-Segmentation
 
-USE RFM_SALES;
+🧾 Dataset Overview
+Database: RFM_SALES
 
-/* Now that we have imported the data using table data import wizard in a table named 'sample_sales_data'
- we can start exploring the table */
- 
- SELECT * FROM SAMPLE_SALES_DATA LIMIT 10;
- 
-SELECT COUNT(*) FROM SAMPLE_SALES_DATA;-- 2,823 ROWS
-SELECT COUNT(DISTINCT ORDERNUMBER) FROM SAMPLE_SALES_DATA;-- 307
+Table: SAMPLE_SALES_DATA
 
-SELECT 
-	ORDERNUMBER,
-    ORDERLINENUMBER,
-    SAMPLE_SALES_DATA.*
-FROM SAMPLE_SALES_DATA
-ORDER BY 1, 2;
+Records: 2,823 rows
 
+Distinct Orders: 307
+
+Columns: Includes ORDERNUMBER, ORDERLINENUMBER, QUANTITYORDERED, PRICEEACH, YEAR_ID, MONTH_ID, etc.
+
+🎯 Objectives
+Explore overall order and product quantities.
+
+Calculate basket size metrics.
+
+Analyze monthly and yearly sales trends.
+
+Pivot data for comparative year-over-year insights.
+
+🧪 Key SQL Queries
+🔍 1. Basic Data Exploration
+sql
+Copy
+Edit
+SELECT * FROM SAMPLE_SALES_DATA LIMIT 10;
+
+SELECT COUNT(*) FROM SAMPLE_SALES_DATA;  -- Total rows
+SELECT COUNT(DISTINCT ORDERNUMBER) FROM SAMPLE_SALES_DATA;  -- Unique orders
+📦 2. Order and Basket Metrics
+sql
+Copy
+Edit
 SELECT 
 	COUNT(DISTINCT ORDERNUMBER) AS NUMBER_OF_ORDERS,
     SUM(QUANTITYORDERED) AS QTY_ORDERED,
     ROUND(SUM(QUANTITYORDERED)/COUNT(DISTINCT ORDERNUMBER),1) AS AVG_BASKET_SIZE
-FROM SAMPLE_SALES_DATA; 
-
-
+FROM SAMPLE_SALES_DATA;
+📅 3. Monthly Order Trends
+sql
+Copy
+Edit
 SELECT 
 	YEAR_ID AS YEAR,
     MONTH_ID AS MONTH,
@@ -32,9 +50,11 @@ SELECT
     ROUND(SUM(QUANTITYORDERED)/COUNT(DISTINCT ORDERNUMBER),1) AS AVG_BASKET_SIZE
 FROM SAMPLE_SALES_DATA
 GROUP BY 1, 2
-ORDER BY 1, 2; 
-
--- Year wise aggregation
+ORDER BY 1, 2;
+📆 4. Yearly Aggregation
+sql
+Copy
+Edit
 SELECT 
 	YEAR_ID AS YEAR,
 	COUNT(DISTINCT ORDERNUMBER) AS NUMBER_OF_ORDERS,
@@ -42,9 +62,11 @@ SELECT
     ROUND(SUM(QUANTITYORDERED)/COUNT(DISTINCT ORDERNUMBER),1) AS AVG_BASKET_SIZE
 FROM SAMPLE_SALES_DATA
 GROUP BY 1
-ORDER BY 1; 
-
--- Now, pivoting the result using CASE WHEN
+ORDER BY 1;
+📊 5. Pivoted Yearly Orders by Month
+sql
+Copy
+Edit
 SELECT 
 	MONTH_ID AS MONTH,
 	COUNT(DISTINCT CASE WHEN YEAR_ID = 2003 THEN ORDERNUMBER ELSE NULL END) AS NUMBER_OF_ORDERS_2003,
@@ -52,9 +74,11 @@ SELECT
     COUNT(DISTINCT CASE WHEN YEAR_ID = 2005 THEN ORDERNUMBER ELSE NULL END) AS NUMBER_OF_ORDERS_2005
 FROM SAMPLE_SALES_DATA
 GROUP BY MONTH_ID
-ORDER BY MONTH_ID; 
-
-
+ORDER BY MONTH_ID;
+📊 6. Pivoted Quantities Ordered by Year
+sql
+Copy
+Edit
 SELECT 
 	MONTH_ID AS MONTH,
 	SUM(CASE WHEN YEAR_ID = 2003 THEN QUANTITYORDERED ELSE 0 END) AS QTY_ORDERED_2003,
@@ -62,7 +86,16 @@ SELECT
     SUM(CASE WHEN YEAR_ID = 2005 THEN QUANTITYORDERED ELSE 0 END) AS QTY_ORDERED_2005
 FROM SAMPLE_SALES_DATA
 GROUP BY MONTH_ID
-ORDER BY MONTH_ID; 
+ORDER BY MONTH_ID;
+🚀 Future Enhancements
+Add Revenue Analysis using PRICEEACH
+
+Segment customers using RFM Analysis
+
+Create dashboards in Tableau or Power BI
+
+Use stored procedures or views for reusable queries
+
 
 
 
