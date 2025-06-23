@@ -1,101 +1,32 @@
-# RFM-Segmentation
+# 🧠 RFM Customer Segmentation Project
+# 🎯 Goal
+Segment customers based on their purchasing behavior using the RFM (Recency–Frequency–Monetary) model and K-Means clustering to enable targeted marketing strategies .
 
-🧾 Dataset Overview
-Database: RFM_SALES
+# 🔍 Business Context
+You’re an online store manager looking to drive higher ROI through customized campaigns. By grouping customers into meaningful clusters—such as loyal, slipping, or promising—you can tailor rewards, recommended products, or win-back offers .
 
-Table: SAMPLE_SALES_DATA
+# 🧩 Methodology & Workflow
+Data Overview & Cleansing
+Imported UK-based online retail transactional data from Dec 2010–Dec 2011. Removed missing or anomalous entries; standardized data types .
 
-Records: 2,823 rows
+RFM Metrics Calculation
+• Recency: Days since last purchase
+• Frequency: Total transactions per customer
+• Monetary: Total spend per customer
 
-Distinct Orders: 307
+Data Preparation
+Grouped data at the customer level and applied scaling—utilizing techniques like log-transformations and dimensionality reduction pipelines .
 
-Columns: Includes ORDERNUMBER, ORDERLINENUMBER, QUANTITYORDERED, PRICEEACH, YEAR_ID, MONTH_ID, etc.
+Cluster Analysis
+Selected cluster count using Elbow Curve and silhouette scores. Applied K-Means and profiled clusters:
 
-🎯 Objectives
-Explore overall order and product quantities.
+Cluster 0: Low‑frequency, low‑spend, likely slipping
 
-Calculate basket size metrics.
+Cluster 1: High‑frequency, high‑spend, loyal
 
-Analyze monthly and yearly sales trends.
+Cluster 2: Frequent but moderate spend; promising
 
-Pivot data for comparative year-over-year insights.
-
-🧪 Key SQL Queries
-🔍 1. Basic Data Exploration
-sql
-Copy
-Edit
-SELECT * FROM SAMPLE_SALES_DATA LIMIT 10;
-
-SELECT COUNT(*) FROM SAMPLE_SALES_DATA;  -- Total rows
-SELECT COUNT(DISTINCT ORDERNUMBER) FROM SAMPLE_SALES_DATA;  -- Unique orders
-📦 2. Order and Basket Metrics
-sql
-Copy
-Edit
-SELECT 
-	COUNT(DISTINCT ORDERNUMBER) AS NUMBER_OF_ORDERS,
-    SUM(QUANTITYORDERED) AS QTY_ORDERED,
-    ROUND(SUM(QUANTITYORDERED)/COUNT(DISTINCT ORDERNUMBER),1) AS AVG_BASKET_SIZE
-FROM SAMPLE_SALES_DATA;
-📅 3. Monthly Order Trends
-sql
-Copy
-Edit
-SELECT 
-	YEAR_ID AS YEAR,
-    MONTH_ID AS MONTH,
-	COUNT(DISTINCT ORDERNUMBER) AS NUMBER_OF_ORDERS,
-    SUM(QUANTITYORDERED) AS QTY_ORDERED,
-    ROUND(SUM(QUANTITYORDERED)/COUNT(DISTINCT ORDERNUMBER),1) AS AVG_BASKET_SIZE
-FROM SAMPLE_SALES_DATA
-GROUP BY 1, 2
-ORDER BY 1, 2;
-📆 4. Yearly Aggregation
-sql
-Copy
-Edit
-SELECT 
-	YEAR_ID AS YEAR,
-	COUNT(DISTINCT ORDERNUMBER) AS NUMBER_OF_ORDERS,
-    SUM(QUANTITYORDERED) AS QTY_ORDERED,
-    ROUND(SUM(QUANTITYORDERED)/COUNT(DISTINCT ORDERNUMBER),1) AS AVG_BASKET_SIZE
-FROM SAMPLE_SALES_DATA
-GROUP BY 1
-ORDER BY 1;
-📊 5. Pivoted Yearly Orders by Month
-sql
-Copy
-Edit
-SELECT 
-	MONTH_ID AS MONTH,
-	COUNT(DISTINCT CASE WHEN YEAR_ID = 2003 THEN ORDERNUMBER ELSE NULL END) AS NUMBER_OF_ORDERS_2003,
-    COUNT(DISTINCT CASE WHEN YEAR_ID = 2004 THEN ORDERNUMBER ELSE NULL END) AS NUMBER_OF_ORDERS_2004,
-    COUNT(DISTINCT CASE WHEN YEAR_ID = 2005 THEN ORDERNUMBER ELSE NULL END) AS NUMBER_OF_ORDERS_2005
-FROM SAMPLE_SALES_DATA
-GROUP BY MONTH_ID
-ORDER BY MONTH_ID;
-📊 6. Pivoted Quantities Ordered by Year
-sql
-Copy
-Edit
-SELECT 
-	MONTH_ID AS MONTH,
-	SUM(CASE WHEN YEAR_ID = 2003 THEN QUANTITYORDERED ELSE 0 END) AS QTY_ORDERED_2003,
-    SUM(CASE WHEN YEAR_ID = 2004 THEN QUANTITYORDERED ELSE 0 END) AS QTY_ORDERED_2004,
-    SUM(CASE WHEN YEAR_ID = 2005 THEN QUANTITYORDERED ELSE 0 END) AS QTY_ORDERED_2005
-FROM SAMPLE_SALES_DATA
-GROUP BY MONTH_ID
-ORDER BY MONTH_ID;
-🚀 Future Enhancements
-Add Revenue Analysis using PRICEEACH
-
-Segment customers using RFM Analysis
-
-Create dashboards in Tableau or Power BI
-
-Use stored procedures or views for reusable queries
-
-
-
-
+Actionable Recommendations
+• Loyal: Launch loyalty programs, offer free shipping, encourage advocacy
+• Promising: Upsell via targeted product suggestions
+• Slipping: Re‑engage with promotions or new product launches
