@@ -31,7 +31,7 @@ Actionable Recommendations
 • Promising: Upsell via targeted product suggestions
 • Slipping: Re‑engage with promotions or new product launches
 
-#✅ Why It’s Valuable
+# ✅ Why It’s Valuable
 
 Data-driven segmentation** fuels personalized marketing
 
